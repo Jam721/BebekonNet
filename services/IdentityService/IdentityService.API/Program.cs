@@ -34,6 +34,13 @@ services.AddScoped<UsersService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
+    context.Database.Migrate();
+}
+
+
 app.UseRouting();
 
 app.UseHttpsRedirection();
