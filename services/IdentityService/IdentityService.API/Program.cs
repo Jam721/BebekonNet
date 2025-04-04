@@ -1,6 +1,7 @@
 using IdentityService.API.Extensions;
 using IdentityService.Application.Interfaces.Auth;
 using IdentityService.Application.Interfaces.Repository.User;
+using IdentityService.Application.Interfaces.Services;
 using IdentityService.Application.Services;
 using IdentityService.Infrastructure;
 using IdentitySevice.Persistence;
@@ -30,7 +31,7 @@ services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
 services.AddScoped<IUserRepository, UserRepository>();
 
-services.AddScoped<UsersService>();
+services.AddScoped<IUserService, UsersService>();
 
 var app = builder.Build();
 

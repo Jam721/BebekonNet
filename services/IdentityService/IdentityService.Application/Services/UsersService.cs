@@ -1,10 +1,11 @@
 ﻿using IdentityService.Application.Interfaces.Auth;
 using IdentityService.Application.Interfaces.Repository.User;
+using IdentityService.Application.Interfaces.Services;
 using IdentityService.Domain.Models;
 
 namespace IdentityService.Application.Services;
 
-public class UsersService
+public class UsersService : IUserService
 {
     private readonly IPasswordHasher _passwordHasher;
     private readonly IUserRepository _repository;

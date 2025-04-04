@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using IdentityService.API.Contracts.Users;
 using IdentityService.Application.Interfaces.Repository.User;
+using IdentityService.Application.Interfaces.Services;
 using IdentityService.Application.Services;
 using IdentityService.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,12 +14,12 @@ namespace IdentityService.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _repository;
-    private readonly UsersService _service;
+    private readonly IUserService _service;
     private readonly ILogger<UserController> _logger;
 
     public UserController(
         IUserRepository repository, 
-        UsersService service, 
+        IUserService service, 
         ILogger<UserController> logger)
     {
         _repository = repository;
