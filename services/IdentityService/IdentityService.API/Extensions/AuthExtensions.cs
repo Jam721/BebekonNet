@@ -43,6 +43,10 @@ public static class AuthExtensions
                 .Requirements.Add(new PermissionRequirements(Permissions.Read)));
             x.AddPolicy(Permissions.Create, builder => builder
                 .Requirements.Add(new PermissionRequirements(Permissions.Create)));
+            x.AddPolicy(Permissions.Delete, builder => builder
+                .Requirements.Add(new PermissionRequirements(Permissions.Delete)));
+            x.AddPolicy(Permissions.Update, builder => builder
+                .Requirements.Add(new PermissionRequirements(Permissions.Update)));
         });
     }
 }

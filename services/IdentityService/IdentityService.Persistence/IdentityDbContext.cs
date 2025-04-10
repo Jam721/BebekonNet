@@ -28,9 +28,9 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Db
 
         modelBuilder.Entity<PermissionEntity>().HasData(
             new PermissionEntity { Id = 1, Name = "Read" },
-            new PermissionEntity { Id = 2, Name = "Write" },
+            new PermissionEntity { Id = 2, Name = "Create" },
             new PermissionEntity { Id = 3, Name = "Delete" },
-            new PermissionEntity { Id = 4, Name = "Admin" }
+            new PermissionEntity { Id = 4, Name = "Update" }
         );
     }
 }

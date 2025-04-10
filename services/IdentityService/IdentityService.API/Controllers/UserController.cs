@@ -63,7 +63,7 @@ public class UserController(
     }
 
     [HttpGet("Me")]
-    [Authorize]
+    [Authorize(Policy = Permissions.Read)]
     public async Task<IActionResult> Me()
     {
         if (!ModelState.IsValid)
@@ -90,20 +90,6 @@ public class UserController(
             logger.LogInformation($"User not detected: {e.Message}");
             return BadRequest();
         }
-    }
-
-    [HttpGet("TestGet")]
-    [Authorize(Policy = Permissions.Read)]
-    public IActionResult TestGet()
-    {
-        return Ok();
-    }
-    
-    [HttpPost("TestPost")]
-    [Authorize(Policy = Permissions.Create)]
-    public IActionResult TestPost()
-    {
-        return Ok();
     }
 
     [HttpPost("Logout")]
