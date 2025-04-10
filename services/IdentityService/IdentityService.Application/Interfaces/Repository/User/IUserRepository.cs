@@ -1,8 +1,11 @@
 ﻿
+using IdentityService.Domain.Models;
+
 namespace IdentityService.Application.Interfaces.Repository.User;
 
 public interface IUserRepository
 {
-    Task AddUserAsync(Domain.Models.User user);
-    Task<Domain.Models.User?> GetUserByEmail(string email);
+    Task AddUserAsync(UserModel userModel);
+    Task<UserModel?> GetUserByEmail(string email);
+    Task<ICollection<PermissionModel>> GetPermissionByEmail(string email);
 }

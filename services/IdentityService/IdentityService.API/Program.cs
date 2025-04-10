@@ -7,7 +7,7 @@ using IdentityService.Infrastructure;
 using IdentitySevice.Persistence;
 using IdentitySevice.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +25,9 @@ services.AddControllers();
 services.AddDbContext<IdentityDbContext>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString("Database"));
+    
+    options.ConfigureWarnings(w => 
+        w.Ignore(RelationalEventId.PendingModelChangesWarning));
 });
 
 services.AddScoped<IJwtProvider, JwtProvider>();
@@ -38,7 +41,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-    context.Database.Migrate();
+    context.Database.EnsureCreated();
 }
 
 

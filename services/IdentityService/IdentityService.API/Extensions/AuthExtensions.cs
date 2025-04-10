@@ -1,12 +1,12 @@
 ﻿using System.Text;
 using IdentityService.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.Google;
 
 namespace IdentityService.API.Extensions;
 
-public static class ApiExtensions
+public static class AuthExtensions
 {
     public static void AddApiAuthentication(
         this IServiceCollection services, 
@@ -34,8 +34,15 @@ public static class ApiExtensions
                     }
                 };
             });
-            
 
-        services.AddAuthorization();
+        services.AddSingleton<IAuthorizationHandler, PermissionsRequirementsHandler>();
+
+        services.AddAuthorization(x=>
+        {
+            x.AddPolicy(Permissions.Read, builder => builder
+                .Requirements.Add(new PermissionRequirements(Permissions.Read)));
+            x.AddPolicy(Permissions.Create, builder => builder
+                .Requirements.Add(new PermissionRequirements(Permissions.Create)));
+        });
     }
 }

@@ -22,7 +22,7 @@ public class UsersService : IUserService
     {
         var hashedPassword = _passwordHasher.Generate(password);
 
-        var user = User.Create(Guid.NewGuid(), userName, hashedPassword, email);
+        var user = UserModel.Create(Guid.NewGuid(), userName, hashedPassword, email);
 
         await _repository.AddUserAsync(user);
     }

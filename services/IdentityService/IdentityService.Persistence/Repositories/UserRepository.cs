@@ -14,34 +14,62 @@ public class UserRepository : IUserRepository
         _context = context;
     }
     
-    public async Task AddUserAsync(User user)
+    public async Task AddUserAsync(UserModel userModel)
     {
-        var userEntity = new UserEntity()
+        var emailExists = await _context.Users
+            .AnyAsync(u => u.Email == userModel.Email);
+    
+        if (emailExists)
         {
-            Id = user.Id,
-            Email = user.Email,
-            PasswordHash = user.PasswordHash,
-            UserName = user.UserName
-        };
+            throw new InvalidOperationException($"Email {userModel.Email} already registered");
+        }
+    
+        var readPermission = await _context.Permissions
+            .FirstOrDefaultAsync(p => p.Name == "Read");
+    
+        if (readPermission == null)
+        {
+            throw new InvalidOperationException("Read permission not found in database");
+        }
 
-        await _context.User.AddAsync(userEntity);
+        var userEntity = new UserEntity
+        {
+            Id = userModel.Id,
+            Email = userModel.Email,
+            PasswordHash = userModel.PasswordHash,
+            UserName = userModel.UserName,
+            Permissions = new List<PermissionEntity> { readPermission }
+        };
+    
+        await _context.Users.AddAsync(userEntity);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<User?> GetUserByEmail(string email)
+    public async Task<UserModel?> GetUserByEmail(string email)
     {
-        var userEntity = await _context.User
+        var userEntity = await _context.Users
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Email == email);
 
         if (userEntity == null) return null;
 
-        return new User
+        return new UserModel
         {
             Id = userEntity.Id,
             Email = userEntity.Email,
             PasswordHash = userEntity.PasswordHash,
             UserName = userEntity.UserName
         };
+    }
+
+    public async Task<ICollection<PermissionModel>> GetPermissionByEmail(string email)
+    {
+        var user = await _context.Users
+            .Include(u => u.Permissions)
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        return user?.Permissions
+            .Select(p => new PermissionModel { Name = p.Name })
+            .ToList() ?? new List<PermissionModel>();
     }
 }

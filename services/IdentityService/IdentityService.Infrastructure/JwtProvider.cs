@@ -12,9 +12,13 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
     private readonly JwtOptions _options = options.Value;
 
-    public string GenerateToken(User user)
+    public string GenerateToken(UserModel userModel)
     {
-        Claim[] claims = [new("email", user.Email)];
+        Claim[] claims = [
+            new(ClaimTypes.Email, userModel.Email),
+            new(ClaimTypes.Role, 
+                userModel.UserName == "Bebekon" ? "Admin" : "User"),
+        ];
         
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
