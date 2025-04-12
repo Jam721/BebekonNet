@@ -1,0 +1,102 @@
+/* src/components/HomePage.module.css */
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section {
+    margin-bottom: 3rem;
+}
+
+.sectionTitle {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #FF6B35;
+}
+
+.storiesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.storyCard {
+    background: #2d2d2d;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.storyCard:hover {
+    transform: translateY(-5px);
+}
+
+.coverContainer {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+}
+
+.coverImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.newBadge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #FF6B35;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.storyLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.storyTitle {
+    color: #fff;
+    font-size: 1.1rem;
+    margin: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.storyAuthor {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 0 0.8rem 0.8rem;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0.8rem;
+    color: #FF6B35;
+    font-size: 0.9rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.8rem;
+}
+
+.tag {
+    background: #404040;
+    color: #ccc;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}

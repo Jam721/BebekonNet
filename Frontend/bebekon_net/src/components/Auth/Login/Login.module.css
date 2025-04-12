@@ -3,10 +3,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 130%;
-    padding: 100px;
-    width: 200%;
+    min-height: 100vh; /* Занимает всю высоту экрана */
+    padding: 2rem; /* Уменьшаем отступы */
+    width: 100%; /* Занимает всю ширину */
     box-sizing: border-box;
+}
+
+.form {
+    background: #2d2d2d;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%; /* Адаптивная ширина */
+    max-width: 500px; /* Максимальная ширина формы */
+    min-width: 300px; /* Минимальная ширина формы */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .error {
@@ -21,15 +31,6 @@
 .submitButton:disabled {
     opacity: 0.7;
     cursor: not-allowed;
-}
-
-.form {
-    background: #2d2d2d;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 45%;
-    max-width: 800px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .title {

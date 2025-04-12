@@ -22,17 +22,26 @@ a:hover {
   color: #535bf2;
 }
 
+/* Исправление для body */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  display: block; /* Заменяем flex на block */
+}
+
+/* Добавляем общий контейнер */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  margin: 0 0 1em 0; /* Добавляем отступ снизу */
 }
 
 button {
@@ -64,5 +73,6 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+    color: #213547; /* Добавляем цвет текста для светлой темы */
   }
 }
