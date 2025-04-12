@@ -20,13 +20,15 @@ public class UserController(
 {
     
     [HttpPost("Register")]
-    public async Task<IActionResult> Register(RegisterUserRequest request)
+    public async Task<IActionResult> Register(
+        RegisterUserRequest request, 
+        CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             throw new Exception();
         try
         {
-            await service.Register(request.UserName, request.Email, request.Password, request.AvatarUrl);
+            await service.Register(request.UserName, request.Email, request.Password, request.AvatarUrl, cancellationToken);
             logger.LogInformation($"User {request.UserName} successfully registered");
             return Ok();
         }
@@ -39,14 +41,16 @@ public class UserController(
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> Login(LoginUserRequest request)
+    public async Task<IActionResult> Login(
+        LoginUserRequest request, 
+        CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             throw new Exception();
         
         try
         {
-            var token = await service.Login(request.Email, request.Password);
+            var token = await service.Login(request.Email, request.Password, cancellationToken);
             Response.Cookies.Append("tasty", token, new CookieOptions()
             {
                 HttpOnly = true,
@@ -64,14 +68,14 @@ public class UserController(
 
     [HttpGet("Me")]
     [Authorize(Policy = PermissionsConst.Read)]
-    public async Task<IActionResult> Me()
+    public async Task<IActionResult> Me(CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             throw new Exception();
         
         try
         {
-            var user = await GetCurrentUser();
+            var user = await GetCurrentUser(cancellationToken);
             
             if(user == null)
                 return NotFound("User not found");
@@ -97,11 +101,11 @@ public class UserController(
 
     [HttpPost("Logout")]
     [Authorize]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             throw new Exception();
-        var user = await GetCurrentUser();
+        var user = await GetCurrentUser(cancellationToken);
         Response.Cookies.Delete("tasty");
 
         if (user != null)
@@ -147,7 +151,7 @@ public class UserController(
         }
     }
     
-    private async Task<UserModel?> GetCurrentUser()
+    private async Task<UserModel?> GetCurrentUser(CancellationToken cancellationToken)
     {
         try
         {
@@ -168,7 +172,7 @@ public class UserController(
                 return null;
             }
 
-            return await repository.GetUserByEmail(email);
+            return await repository.GetUserByEmail(email, cancellationToken);
         }
         catch (Exception ex)
         {

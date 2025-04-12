@@ -18,18 +18,18 @@ public class UsersService : IUserService
         _jwtProvider = jwtProvider;
     }
     
-    public async Task Register(string userName, string email, string password, string avatarUrl)
+    public async Task Register(string userName, string email, string password, string avatarUrl, CancellationToken cancellationToken = default)
     {
         var hashedPassword = _passwordHasher.Generate(password);
 
         var user = UserModel.Create(Guid.NewGuid(), userName, hashedPassword, email, avatarUrl);
 
-        await _repository.AddUserAsync(user);
+        await _repository.AddUserAsync(user, cancellationToken);
     }
 
-    public async Task<string> Login(string email, string password)
+    public async Task<string> Login(string email, string password, CancellationToken cancellationToken = default)
     {
-        var user = await _repository.GetUserByEmail(email);
+        var user = await _repository.GetUserByEmail(email, cancellationToken);
 
         if (user == null) throw new Exception("Пользователь не найден");
 

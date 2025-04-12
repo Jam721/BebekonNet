@@ -14,10 +14,10 @@ public class UserRepository : IUserRepository
         _context = context;
     }
     
-    public async Task AddUserAsync(UserModel userModel)
+    public async Task AddUserAsync(UserModel userModel, CancellationToken cancellationToken = default)
     {
         var emailExists = await _context.Users
-            .AnyAsync(u => u.Email == userModel.Email);
+            .AnyAsync(u => u.Email == userModel.Email, cancellationToken);
     
         if (emailExists)
         {
@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
         }
     
         var readPermission = await _context.Permissions
-            .FirstOrDefaultAsync(p => p.Name == "Read");
+            .FirstOrDefaultAsync(p => p.Name == "Read", cancellationToken);
     
         if (readPermission == null)
         {
@@ -47,11 +47,11 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserModel?> GetUserByEmail(string email)
+    public async Task<UserModel?> GetUserByEmail(string email, CancellationToken cancellationToken = default)
     {
         var userEntity = await _context.Users
             .Include(userEntity => userEntity.Permissions)
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         if (userEntity == null) return null;
 
@@ -71,11 +71,11 @@ public class UserRepository : IUserRepository
         };
     }
 
-    public async Task<ICollection<PermissionModel>> GetPermissionByEmail(string email)
+    public async Task<ICollection<PermissionModel>> GetPermissionByEmail(string email, CancellationToken cancellationToken = default)
     {
         var user = await _context.Users
             .Include(u => u.Permissions)
-            .FirstOrDefaultAsync(u => u.Email == email);
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
         return user?.Permissions
             .Select(p => new PermissionModel { Name = p.Name })
