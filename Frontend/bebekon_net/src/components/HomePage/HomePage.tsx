@@ -48,7 +48,7 @@ export const HomePage = () => {
     return (
         <div className={styles.container}>
             <StoryList title="Популярные сейчас" stories={popularStories} />
-            <StoryList title="Новые поступления" stories={newStories} />
+            <StoryList title="Новые" stories={newStories} />
         </div>
     );
 };

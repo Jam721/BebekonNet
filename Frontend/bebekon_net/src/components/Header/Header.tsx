@@ -31,7 +31,7 @@ export const Header = () => {
                     setUserData({
                         ...data,
                         // Правильное объединение URL
-                        avatarUrl: data.avatarUrl ? `${MINIO_BASE_URL}/avatars/${data.avatarUrl}` : null
+                        avatarUrl: data.avatarUrl ? `${MINIO_BASE_URL}/bebekonnet/${data.avatarUrl}` : null
                     });
                     setIsAuthenticated(true);
                 }
