@@ -39,14 +39,14 @@ public static class AuthExtensions
 
         services.AddAuthorization(x=>
         {
-            x.AddPolicy(Permissions.Read, builder => builder
-                .Requirements.Add(new PermissionRequirements(Permissions.Read)));
-            x.AddPolicy(Permissions.Create, builder => builder
-                .Requirements.Add(new PermissionRequirements(Permissions.Create)));
-            x.AddPolicy(Permissions.Delete, builder => builder
-                .Requirements.Add(new PermissionRequirements(Permissions.Delete)));
-            x.AddPolicy(Permissions.Update, builder => builder
-                .Requirements.Add(new PermissionRequirements(Permissions.Update)));
+            x.AddPolicy(PermissionsConst.Read, builder => builder
+                .Requirements.Add(new PermissionRequirements(PermissionsConst.Read)));
+            x.AddPolicy(PermissionsConst.Create, builder => builder
+                .Requirements.Add(new PermissionRequirements(PermissionsConst.Create)));
+            x.AddPolicy(PermissionsConst.Delete, builder => builder
+                .Requirements.Add(new PermissionRequirements(PermissionsConst.Delete)));
+            x.AddPolicy(PermissionsConst.Update, builder => builder
+                .Requirements.Add(new PermissionRequirements(PermissionsConst.Update)));
         });
     }
 }

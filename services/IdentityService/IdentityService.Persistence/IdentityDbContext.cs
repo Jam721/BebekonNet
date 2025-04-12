@@ -1,4 +1,5 @@
-﻿using IdentitySevice.Persistence.Entities;
+﻿using IdentityService.Infrastructure;
+using IdentitySevice.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentitySevice.Persistence;
@@ -27,10 +28,26 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Db
             .IsUnique();
 
         modelBuilder.Entity<PermissionEntity>().HasData(
-            new PermissionEntity { Id = 1, Name = "Read" },
-            new PermissionEntity { Id = 2, Name = "Create" },
-            new PermissionEntity { Id = 3, Name = "Delete" },
-            new PermissionEntity { Id = 4, Name = "Update" }
+            new PermissionEntity
+            {
+                Id = 1, 
+                Name = PermissionsConst.Read
+            },
+            new PermissionEntity
+            {
+                Id = 2, 
+                Name = PermissionsConst.Create
+            },
+            new PermissionEntity
+            {
+                Id = 3, 
+                Name = PermissionsConst.Delete
+            },
+            new PermissionEntity
+            {
+                Id = 4, 
+                Name = PermissionsConst.Update
+            }
         );
     }
 }

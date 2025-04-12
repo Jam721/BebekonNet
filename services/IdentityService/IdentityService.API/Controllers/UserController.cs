@@ -26,7 +26,7 @@ public class UserController(
             throw new Exception();
         try
         {
-            await service.Register(request.UserName, request.Email, request.Password);
+            await service.Register(request.UserName, request.Email, request.Password, request.AvatarUrl);
             logger.LogInformation($"User {request.UserName} successfully registered");
             return Ok();
         }
@@ -63,7 +63,7 @@ public class UserController(
     }
 
     [HttpGet("Me")]
-    [Authorize(Policy = Permissions.Read)]
+    [Authorize(Policy = PermissionsConst.Read)]
     public async Task<IActionResult> Me()
     {
         if (!ModelState.IsValid)
@@ -81,7 +81,10 @@ public class UserController(
             return Ok(new
             {
                 user.UserName,
-                user.Email
+                user.Email,
+                user.Permisions,
+                user.CreatedAt,
+                user.AvatarUrl
             });
             
         }

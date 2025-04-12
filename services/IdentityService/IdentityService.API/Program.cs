@@ -8,6 +8,7 @@ using IdentitySevice.Persistence;
 using IdentitySevice.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.FileProviders;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +44,6 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
     context.Database.EnsureCreated();
 }
-
 
 app.UseRouting();
 

@@ -17,9 +17,13 @@ public class UserModel
     public string PasswordHash { get; set; }
     public string Email { get; set; }
     
-    public ICollection<PermissionModel> Permisions { get; set; } 
+    public string AvatarUrl { get; set; }
 
-    public static UserModel Create(Guid id, string userName, string passwordHash, string email)
+    public DateTime CreatedAt { get; set; }
+
+    public List<PermissionModel> Permisions { get; set; } = new();
+
+    public static UserModel Create(Guid id, string userName, string passwordHash, string email, string avatarUrl)
     {
         return new UserModel(id, userName, passwordHash, email);
     }

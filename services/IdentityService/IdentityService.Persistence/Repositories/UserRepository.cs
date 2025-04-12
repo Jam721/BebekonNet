@@ -38,6 +38,8 @@ public class UserRepository : IUserRepository
             Email = userModel.Email,
             PasswordHash = userModel.PasswordHash,
             UserName = userModel.UserName,
+            CreatedAt = DateTime.UtcNow,
+            AvatarUrl = userModel.AvatarUrl,
             Permissions = new List<PermissionEntity> { readPermission }
         };
     
@@ -48,7 +50,7 @@ public class UserRepository : IUserRepository
     public async Task<UserModel?> GetUserByEmail(string email)
     {
         var userEntity = await _context.Users
-            .AsNoTracking()
+            .Include(userEntity => userEntity.Permissions)
             .FirstOrDefaultAsync(u => u.Email == email);
 
         if (userEntity == null) return null;
@@ -58,7 +60,14 @@ public class UserRepository : IUserRepository
             Id = userEntity.Id,
             Email = userEntity.Email,
             PasswordHash = userEntity.PasswordHash,
-            UserName = userEntity.UserName
+            UserName = userEntity.UserName,
+            CreatedAt = userEntity.CreatedAt,
+            AvatarUrl = userEntity.AvatarUrl,
+            Permisions = userEntity.Permissions.Select(p => new PermissionModel()
+            {
+                Id = p.Id,
+                Name = p.Name,
+            }).ToList()
         };
     }
 

@@ -13,7 +13,7 @@ using Xunit;
 public class UserControllerTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock = new();
-    private readonly Mock<UsersService> _usersServiceMock = new(MockBehavior.Strict, null, null); // если есть зависимости в UsersService — передавай их сюда
+    private readonly Mock<UsersService> _usersServiceMock = new(MockBehavior.Strict, null, null);
     private readonly Mock<ILogger<UserController>> _loggerMock = new();
 
     private UserController CreateController()
@@ -21,7 +21,7 @@ public class UserControllerTests
         var controller = new UserController(_userRepositoryMock.Object, _usersServiceMock.Object, _loggerMock.Object);
         controller.ControllerContext = new ControllerContext
         {
-            HttpContext = new DefaultHttpContext() // нужно для Response / Cookies
+            HttpContext = new DefaultHttpContext()
         };
         return controller;
     }
@@ -29,7 +29,6 @@ public class UserControllerTests
     [Fact]
     public async Task Register_ShouldReturnOk_WhenModelIsValid()
     {
-        // Arrange
         var controller = CreateController();
         var request = new RegisterUserRequest
         {
@@ -41,17 +40,14 @@ public class UserControllerTests
         _usersServiceMock.Setup(s => s.Register(request.UserName, request.Email, request.Password))
             .Returns(Task.CompletedTask);
 
-        // Act
         var result = await controller.Register(request);
 
-        // Assert
         Assert.IsType<OkResult>(result);
     }
 
     [Fact]
     public async Task Login_ShouldReturnToken_WhenCredentialsAreCorrect()
     {
-        // Arrange
         var controller = CreateController();
         var request = new LoginUserRequest
         {
@@ -64,10 +60,8 @@ public class UserControllerTests
         _usersServiceMock.Setup(s => s.Login(request.Email, request.Password))
             .ReturnsAsync(fakeToken);
 
-        // Act
         var result = await controller.Login(request);
 
-        // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Equal(fakeToken, okResult.Value);
     }

@@ -18,11 +18,11 @@ public class UsersService : IUserService
         _jwtProvider = jwtProvider;
     }
     
-    public async Task Register(string userName, string email, string password)
+    public async Task Register(string userName, string email, string password, string avatarUrl)
     {
         var hashedPassword = _passwordHasher.Generate(password);
 
-        var user = UserModel.Create(Guid.NewGuid(), userName, hashedPassword, email);
+        var user = UserModel.Create(Guid.NewGuid(), userName, hashedPassword, email, avatarUrl);
 
         await _repository.AddUserAsync(user);
     }

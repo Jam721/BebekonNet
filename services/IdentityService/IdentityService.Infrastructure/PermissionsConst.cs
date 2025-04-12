@@ -1,6 +1,6 @@
 ﻿namespace IdentityService.Infrastructure;
 
-public static class Permissions
+public static class PermissionsConst
 {
     public const string Read = nameof(Read);
     public const string Create = nameof(Create);
