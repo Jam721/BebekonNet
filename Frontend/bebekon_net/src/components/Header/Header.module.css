@@ -1,0 +1,181 @@
+/* src/components/Header.module.css */
+.header {
+    background: #1a1a1a;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: fixed; /* Фиксированная позиция */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%; /* Растягиваем на всю ширину */
+    box-sizing: border-box; /* Учитываем padding в ширине */
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.logo {
+    height: 40px;
+    width: auto;
+}
+
+.logoText {
+    color: #ef8c00;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.navList {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navLink {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.navLink:hover {
+    color: #ef8c00;
+}
+
+.profileMenu {
+    position: relative;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ef8c00;
+}
+
+.dropdownMenu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: #2d2d2d;
+    min-width: 250px;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}
+
+.menuHeader {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #404040;
+    margin-bottom: 1rem;
+}
+
+.profileAvatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.profileName {
+    color: #fff;
+    margin: 0;
+    font-weight: 600;
+}
+
+.profileEmail {
+    color: #888;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.menuSection {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #404040;
+    margin-bottom: 0.5rem;
+}
+
+.menuSection:last-child {
+    border-bottom: none;
+}
+
+.menuItem {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.menuItem:hover {
+    background: rgba(255, 156, 16, 0.58);
+    color: white;
+}
+
+.loginButton{
+    width: 100%;
+    border: 1px solid #ef8c00;
+    background: #2d2d2d;
+    color: white;
+    padding: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.loginButton:hover {
+    opacity: 0.9;
+}
+
+.registerButton{
+    width: 100%;
+    background: #ef8c00;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.registerButton:hover {
+    opacity: 0.9;
+}
+
+
+.logoutButton {
+    width: 100%;
+    background: #ef8c00;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.logoutButton:hover {
+    opacity: 0.9;
+}

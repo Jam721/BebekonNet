@@ -26,6 +26,15 @@ services.AddControllers();
 
 services.AddDbContextExtensions(configuration);
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("ReactPolicy", policy => {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddMinio(configureClient => 
 {
     var endpoint = builder.Configuration["Minio:Endpoint"];
@@ -59,6 +68,8 @@ app.UseMiddleware<FileValidationMiddleware>();
 app.UseRouting();
 
 app.UseHttpsRedirection();
+
+app.UseCors("ReactPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -54,6 +54,10 @@ public class UserController(
             Response.Cookies.Append("tasty", token, new CookieOptions()
             {
                 HttpOnly = true,
+                Secure = false,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTimeOffset.UtcNow.AddDays(7),
+                Path = "/"
             });
             logger.LogInformation($"User {request.Email} logged in");
             

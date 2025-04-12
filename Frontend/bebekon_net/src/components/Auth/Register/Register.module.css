@@ -1,0 +1,210 @@
+/* Login.module.css */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 150%;
+    padding: 100px;
+    width: 200%;
+    box-sizing: border-box;
+}
+
+.form {
+    background: #2d2d2d;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 50%;
+    max-width: 800px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.title {
+    color: #fff;
+    text-align: center; /* Центрируем заголовок */
+    margin-bottom: 2rem;
+}
+
+.inputGroup {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.submitButton {
+    width: 100%;
+    background: #FF6B35;
+    color: white;
+    text-align: center; /* Центрируем текст кнопки */
+    padding: 12px;
+}
+.label {
+    display: block;
+    color: #888;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #404040;
+    border-radius: 6px;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #FF6B35;
+}
+
+.submitButton:hover {
+    opacity: 0.9;
+}
+
+.linkText {
+    color: #888;
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.link {
+    color: #FF6B35;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: #ff884b;
+}
+
+.avatarSection {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.avatarPreview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #404040;
+    margin: 0 auto 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 2px dashed #FF6B35;
+    transition: border-color 0.3s ease;
+}
+
+.avatarPreview:hover {
+    border-color: #ff884b;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.cropModal {
+    background: #2d2d2d;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.cropContent {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    position: relative;
+}
+
+.cropImageContainer {
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+}
+
+.cropImage {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.modalButtons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.confirmButton {
+    background: #FF6B35;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancelButton {
+    background: #444;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.error {
+    color: #ff4444;
+    background: #2d1e2f;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.submitButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.uploadText {
+    color: #888;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 480px) {
+    .form {
+        padding: 1.5rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+}

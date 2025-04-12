@@ -1,0 +1,104 @@
+/* Login.module.css */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 130%;
+    padding: 100px;
+    width: 200%;
+    box-sizing: border-box;
+}
+
+.error {
+    color: #ff4444;
+    background: #2d1e2f;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.submitButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.form {
+    background: #2d2d2d;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 45%;
+    max-width: 800px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.title {
+    color: #fff;
+    text-align: center; /* Центрируем заголовок */
+    margin-bottom: 2rem;
+}
+
+.inputGroup {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.submitButton {
+    width: 100%;
+    background: #FF6B35;
+    color: white;
+    text-align: center; /* Центрируем текст кнопки */
+    padding: 12px;
+}
+.label {
+    display: block;
+    color: #888;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #404040;
+    border-radius: 6px;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #FF6B35;
+}
+
+.submitButton:hover {
+    opacity: 0.9;
+}
+
+.linkText {
+    color: #888;
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.link {
+    color: #FF6B35;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link:hover {
+    color: #ff884b;
+}
+
+@media (max-width: 480px) {
+    .form {
+        padding: 1.5rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+}
