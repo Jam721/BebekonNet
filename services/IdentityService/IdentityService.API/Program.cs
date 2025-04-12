@@ -1,4 +1,5 @@
 using IdentityService.API.Extensions;
+using IdentityService.API.Validation;
 using IdentityService.Application.Interfaces.Auth;
 using IdentityService.Application.Interfaces.Repository.User;
 using IdentityService.Application.Interfaces.Services;
@@ -8,7 +9,7 @@ using IdentitySevice.Persistence;
 using IdentitySevice.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.FileProviders;
+using Minio;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,13 +24,21 @@ services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddControllers();
 
-services.AddDbContext<IdentityDbContext>(options =>
+services.AddDbContextExtensions(configuration);
+
+builder.Services.AddMinio(configureClient => 
 {
-    options.UseNpgsql(configuration.GetConnectionString("Database"));
-    
-    options.ConfigureWarnings(w => 
-        w.Ignore(RelationalEventId.PendingModelChangesWarning));
+    var endpoint = builder.Configuration["Minio:Endpoint"];
+    var accessKey = builder.Configuration["Minio:AccessKey"];
+    var secretKey = builder.Configuration["Minio:SecretKey"];
+    var useSsl = bool.Parse(builder.Configuration["Minio:UseSSL"] ?? "false");
+
+    configureClient
+        .WithEndpoint(endpoint)
+        .WithCredentials(accessKey, secretKey)
+        .WithSSL(useSsl);
 });
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -44,6 +53,8 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
     context.Database.EnsureCreated();
 }
+
+app.UseMiddleware<FileValidationMiddleware>();
 
 app.UseRouting();
 

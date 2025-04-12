@@ -21,14 +21,14 @@ public class UserController(
     
     [HttpPost("Register")]
     public async Task<IActionResult> Register(
-        RegisterUserRequest request, 
+        [FromForm] RegisterUserRequest request, 
         CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             throw new Exception();
         try
         {
-            await service.Register(request.UserName, request.Email, request.Password, request.AvatarUrl, cancellationToken);
+            await service.Register(request.UserName, request.Email, request.Password, request.AvatarFile, cancellationToken);
             logger.LogInformation($"User {request.UserName} successfully registered");
             return Ok();
         }
