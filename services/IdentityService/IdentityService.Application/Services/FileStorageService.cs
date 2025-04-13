@@ -51,4 +51,29 @@ public class FileStorageService : IFileStorageService
 
         return await _minioClient.PresignedGetObjectAsync(args);
     }
+    
+    public async Task<bool> DeleteAvatarAsync(string objectName)
+    {
+        if (string.IsNullOrWhiteSpace(objectName) )
+        {
+            _logger.LogWarning("Попытка удаления аватара с пустым именем объекта");
+            return false;
+        }
+
+        try
+        {
+            var args = new RemoveObjectArgs()
+                .WithBucket(_bucketName)
+                .WithObject(objectName);
+
+            await _minioClient.RemoveObjectAsync(args);
+            _logger.LogInformation("Аватар {ObjectName} успешно удалён", objectName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ошибка удаления аватара {ObjectName}", objectName);
+            return false;
+        }
+    }
 }

@@ -1,0 +1,81 @@
+/* Admin Panel Styles */
+.adminContainer {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #2d2d2d;
+    border-radius: 8px;
+}
+
+.adminTitle {
+    color: #ef8c00;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.usersList {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.userCard {
+    background: #3d3d3d;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.userHeader {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.userAvatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #ef8c00;
+    object-fit: cover;
+}
+
+.permissionsSection {
+    margin: 1rem 0;
+}
+
+.permissionsList {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.permissionBadge {
+    background: #4d4d4d;
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+.grantButton {
+    width: 100%;
+    background: #ef8c00;
+    color: white;
+    border: none;
+    padding: 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.grantButton:disabled {
+    background: #6d6d6d;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.grantButton:hover:not(:disabled) {
+    opacity: 0.9;
+}

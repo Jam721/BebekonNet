@@ -18,6 +18,38 @@ public class UserController(
     ILogger<UserController> logger)
     : ControllerBase
 {
+
+    [HttpPost("AllUsers")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> AllUsers(CancellationToken cancellationToken)
+    {
+        var users = await repository.GetAllUsersAsync(cancellationToken);
+        
+        return Ok(users);
+    }
+
+    [HttpPut("UpdateUser")]
+    public async Task<IActionResult> UpdateUser(
+        [FromForm]UpdateUserRequest request, 
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var currentUser = await GetCurrentUser(cancellationToken);
+            if (currentUser == null)
+                return Unauthorized();
+            var user = await service.UpdateUser(
+                currentUser.Id, request.Email, request.UserName,
+                request.Password, request.AvatarFile,
+                cancellationToken);
+
+            return Ok(user.user);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
     
     [HttpPost("Register")]
     public async Task<IActionResult> Register(
@@ -122,6 +154,23 @@ public class UserController(
         }
     
         return Ok();
+    }
+
+    [HttpPost("GiveAuthorship")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GiveAuthorship(string email, CancellationToken token)
+    {
+        try
+        {
+            await repository.GiveAuthorshipAsync(email, token);
+            var user = await repository.GetUserByEmail(email, token);
+            return Ok(user);
+        }
+        catch (Exception e)
+        {
+            logger.LogError($"User {email} failed to give authorship: {e.Message}");
+            throw;
+        }
     }
 
     [HttpGet("GetRole")]

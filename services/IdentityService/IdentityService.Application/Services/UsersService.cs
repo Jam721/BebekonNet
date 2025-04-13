@@ -72,6 +72,53 @@ public class UsersService : IUserService
 
         return token;
     }
-    
-    
+
+    public async Task<(UserModel? user, string? token)> UpdateUser(
+        Guid id,
+        string? email,
+        string? userName,
+        string? password,
+        IFormFile? avatarFile,
+        CancellationToken ct = default)
+    {
+        var user = await _repository.GetUserById(id, ct);
+        if (user == null)
+            throw new ArgumentException("User not found");
+        
+        string? hashedPassword = null;
+        if (!string.IsNullOrEmpty(password))
+        {
+            hashedPassword = _passwordHasher.Generate(password);
+        }
+        
+        string? avatarUrl = user.AvatarUrl;
+        if (avatarFile != null && avatarFile.Length > 0)
+        {
+            if (avatarUrl != "default-avatar.png")
+            {
+                await _fileStorageService.DeleteAvatarAsync(avatarUrl);
+            }
+            
+            await using var stream = avatarFile.OpenReadStream();
+            var uploadedName = await _fileStorageService.UploadAvatarAsync(
+                stream,
+                avatarFile.FileName,
+                avatarFile.ContentType);
+            avatarUrl = uploadedName ?? avatarUrl;
+        }
+        
+        var updatedUser = await _repository.UpdateUserByEmail(
+            id,
+            email!,
+            userName!,
+            hashedPassword ?? user.PasswordHash!,
+            avatarUrl!,
+            ct
+        );
+        
+        var token = _jwtProvider.GenerateToken(updatedUser!);
+
+        return (updatedUser, token);
+        
+    }
 }

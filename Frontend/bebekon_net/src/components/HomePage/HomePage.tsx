@@ -1,5 +1,6 @@
 // src/components/HomePage.tsx
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 import styles from './HomePage.module.css';
 import {mockStories, Story} from "../../mocks/stories.ts";
 
@@ -30,17 +31,52 @@ const StoryCard = ({ story }: { story: Story }) => (
     </div>
 );
 
-const StoryList = ({ stories, title }: { stories: Story[]; title: string }) => (
-    <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{title}</h2>
-        <div className={styles.storiesGrid}>
-            {stories.map(story => (
-                <StoryCard key={story.id} story={story} />
-            ))}
-        </div>
-    </section>
-);
+const StoryList = ({ stories, title }: { stories: Story[]; title: string }) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollStep = 300; // Шаг прокрутки в пикселях
 
+    const handleScroll = (direction: 'left' | 'right') => {
+        if (scrollRef.current) {
+            const scrollAmount = direction === 'right' ? scrollStep : -scrollStep;
+            scrollRef.current.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    return (
+        <section className={styles.section}>
+            <br/>
+            <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>{title}</h2>
+                <div className={styles.scrollControls}>
+                    <button
+                        onClick={() => handleScroll('left')}
+                        className={styles.scrollButton}
+                        aria-label="Прокрутить влево"
+                    >
+                        &lt;
+                    </button>
+                    <button
+                        onClick={() => handleScroll('right')}
+                        className={styles.scrollButton}
+                        aria-label="Прокрутить вправо"
+                    >
+                        &gt;
+                    </button>
+                </div>
+            </div>
+            <div className={styles.storiesGrid} ref={scrollRef}>
+                {stories.map(story => (
+                    <StoryCard key={story.id} story={story} />
+                ))}
+            </div>
+        </section>
+    );
+};
+
+// src/components/HomePage.tsx
 export const HomePage = () => {
     const popularStories = [...mockStories].sort((a, b) => b.views - a.views);
     const newStories = [...mockStories].filter(story => story.isNew);

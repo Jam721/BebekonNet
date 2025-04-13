@@ -15,31 +15,45 @@ interface UserData {
 export const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
     const navigate = useNavigate();
     const MINIO_BASE_URL = "http://localhost:9000";
 
+    // Проверка аутентификации и прав
     useEffect(() => {
-        const checkAuth = async () => {
+        const checkAuthAndRole = async () => {
             try {
-                const response = await fetch('http://localhost:5124/identity/User/Me', {
+                // Проверка аутентификации
+                const authResponse = await fetch('http://localhost:5124/identity/User/Me', {
                     credentials: 'include'
                 });
 
-                if (response.ok) {
-                    const data = await response.json();
+                if (authResponse.ok) {
+                    const userData = await authResponse.json();
                     setUserData({
-                        ...data,
-                        // Правильное объединение URL
-                        avatarUrl: data.avatarUrl ? `${MINIO_BASE_URL}/bebekonnet/${data.avatarUrl}` : null
+                        ...userData,
+                        avatarUrl: userData.avatarUrl ?
+                            `${MINIO_BASE_URL}/bebekonnet/${userData.avatarUrl}` :
+                            null
                     });
                     setIsAuthenticated(true);
+
+                    // Проверка роли
+                    const roleResponse = await fetch('http://localhost:5124/identity/User/GetRole', {
+                        credentials: 'include'
+                    });
+
+                    if (roleResponse.ok) {
+                        const role = await roleResponse.text();
+                        setIsAdmin(role === 'Admin');
+                    }
                 }
             } catch (error) {
                 console.error('Auth check failed:', error);
             }
         };
-        checkAuth();
+        checkAuthAndRole();
     }, []);
 
     const handleLogout = async () => {
@@ -50,6 +64,7 @@ export const Header = () => {
             });
 
             setIsAuthenticated(false);
+            setIsAdmin(false);
             setUserData(null);
             navigate('/login');
         } catch (error) {
@@ -59,10 +74,12 @@ export const Header = () => {
 
     return (
         <header className={styles.header}>
-            <div className={styles.logoContainer}>
-                <img src={logo} alt="BN Logo" className={styles.logo} />
-                <span className={styles.logoText}>BN</span>
-            </div>
+            <Link to="/">
+                <div className={styles.logoContainer}>
+                    <img src={logo} alt="BN Logo" className={styles.logo} />
+                    <span className={styles.logoText}>BN</span>
+                </div>
+            </Link>
 
             <nav className={styles.nav}>
                 <ul className={styles.navList}>
@@ -128,6 +145,15 @@ export const Header = () => {
                                                 Выйти
                                             </button>
                                         </div>
+                                        <br/>
+                                        {isAdmin && (
+                                            <Link
+                                                to="/adminpanel"
+                                                className={styles.adminButton}
+                                            >
+                                                Админка
+                                            </Link>
+                                        )}
                                     </>
                                 ) : (
                                     <div className={styles.menuSection}>

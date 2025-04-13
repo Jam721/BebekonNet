@@ -26,7 +26,7 @@ services.AddControllers();
 
 services.AddDbContextExtensions(configuration);
 
-builder.Services.AddCors(options => {
+services.AddCors(options => {
     options.AddPolicy("ReactPolicy", policy => {
         policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
             .AllowAnyHeader()
@@ -35,19 +35,9 @@ builder.Services.AddCors(options => {
     });
 });
 
-builder.Services.AddMinio(configureClient => 
-{
-    var endpoint = builder.Configuration["Minio:Endpoint"];
-    var accessKey = builder.Configuration["Minio:AccessKey"];
-    var secretKey = builder.Configuration["Minio:SecretKey"];
-    var useSsl = bool.Parse(builder.Configuration["Minio:UseSSL"] ?? "false");
+services.AddMinioExtension(configuration);
 
-    configureClient
-        .WithEndpoint(endpoint)
-        .WithCredentials(accessKey, secretKey)
-        .WithSSL(useSsl);
-});
-builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+services.AddScoped<IFileStorageService, FileStorageService>();
 
 services.AddScoped<IJwtProvider, JwtProvider>();
 services.AddScoped<IPasswordHasher, PasswordHasher>();

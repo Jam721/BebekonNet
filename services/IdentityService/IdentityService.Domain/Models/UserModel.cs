@@ -4,7 +4,7 @@ namespace IdentityService.Domain.Models;
 
 public class UserModel
 {
-    private UserModel(Guid id, string userName, string passwordHash, string email, string avatarUrl)
+    private UserModel(Guid id, string userName, string? passwordHash, string email, string avatarUrl)
     {
         Id = id;
         UserName = userName;
@@ -17,7 +17,7 @@ public class UserModel
     public Guid Id { get; set; }
 
     public string UserName { get; set; }
-    public string PasswordHash { get; set; }
+    public string? PasswordHash { get; set; }
     public string Email { get; set; }
     
     [JsonPropertyName("avatarUrl")]
@@ -27,7 +27,7 @@ public class UserModel
 
     public List<PermissionModel> Permisions { get; set; } = new();
 
-    public static UserModel Create(Guid id, string userName, string passwordHash, string email, string? avatarUrl)
+    public static UserModel Create(Guid id, string userName, string? passwordHash, string email, string? avatarUrl)
     {
         return new UserModel(id, userName, passwordHash, email, avatarUrl);
     }

@@ -17,7 +17,7 @@ export const mockStories: Story[] = [
         title: 'Путь демона',
         author: 'Иван Иванов',
         coverUrl: st,
-        rating: 4.8,
+        rating: 8.6,
         views: 12500,
         tags: ['Фэнтези', 'Приключения', '18+'],
         isNew: true
@@ -27,7 +27,7 @@ export const mockStories: Story[] = [
         title: 'Меч бессмертия',
         author: 'Анна Петрова',
         coverUrl: st,
-        rating: 4.5,
+        rating: 9.9,
         views: 8900,
         tags: ['Боевик', 'Мистика']
     },
@@ -36,7 +36,7 @@ export const mockStories: Story[] = [
         title: 'Хроники Арканы',
         author: 'Сергей Смирнов',
         coverUrl: st,
-        rating: 4.9,
+        rating: 9.8,
         views: 23450,
         tags: ['Магия', 'Драма'],
         isNew: true
@@ -46,7 +46,7 @@ export const mockStories: Story[] = [
         title: 'Тень империи',
         author: 'Мария Иванова',
         coverUrl: st,
-        rating: 4.3,
+        rating: 8.4,
         views: 6700,
         tags: ['Политика', 'История']
     },
@@ -55,7 +55,7 @@ export const mockStories: Story[] = [
         title: 'Звездный скиталец',
         author: 'Алексей Космосов',
         coverUrl: st,
-        rating: 4.7,
+        rating: 9,
         views: 14200,
         tags: ['Космос', 'Приключения']
     },
@@ -64,7 +64,7 @@ export const mockStories: Story[] = [
         title: 'Тайна черного леса',
         author: 'Ольга Темная',
         coverUrl: st,
-        rating: 4.6,
+        rating: 8,
         views: 9800,
         tags: ['Ужасы', 'Мистика'],
         isNew: true

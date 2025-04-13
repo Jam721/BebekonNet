@@ -26,6 +26,10 @@ public class IdentityDbContext(DbContextOptions<IdentityDbContext> options) : Db
         modelBuilder.Entity<UserEntity>()
             .HasIndex(u => u.Email)
             .IsUnique();
+        
+        modelBuilder.Entity<UserEntity>()
+            .HasIndex(u => u.UserName)
+            .IsUnique();
 
         modelBuilder.Entity<PermissionEntity>().HasData(
             new PermissionEntity
