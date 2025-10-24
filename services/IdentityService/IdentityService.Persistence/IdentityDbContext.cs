@@ -1,4 +1,5 @@
-﻿using IdentityService.Infrastructure;
+﻿using IdentityService.Application.Services;
+using IdentityService.Application.Services.Auth;
 using IdentitySevice.Persistence.Entities;
 using Microsoft.EntityFrameworkCore;
 

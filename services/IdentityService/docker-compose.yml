@@ -1,26 +1,64 @@
-﻿services:
+﻿version: '3.8'
+
+services:
   crud_web_api:
     build:
       context: .
-      dockerfile: IdentityService.API/Dockerfile  # Проверьте путь
+      dockerfile: IdentityService.API/Dockerfile
     ports:
       - "8080:8080"
     container_name: test
     environment:
       - ASPNETCORE_URLS=http://*:8080
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Database=Host=db;Port=5432;Database=TestDb;User Id=postgres;Password=123;
+      - Minio__Endpoint=minio:9000
+      - Minio__AccessKey=admin
+      - Minio__SecretKey=Artur5810
+      - Minio__BucketName=bebekonnet
+      - Minio__UseSSL=false
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    restart: on-failure
+
   db:
     image: postgres:latest
     ports:
-      - "5432:5432"  # Исправлено
+      - "5439:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
+      POSTGRES_PASSWORD: 123
       POSTGRES_DB: TestDb
     volumes:
       - db_data:/var/lib/postgresql/data
     container_name: db_test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: Artur5810
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    container_name: minio_test
+
 volumes:
   db_data:
+  minio_data:

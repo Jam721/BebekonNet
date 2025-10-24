@@ -4,13 +4,9 @@ using IdentityService.Application.Interfaces.Auth;
 using IdentityService.Application.Interfaces.Repository.User;
 using IdentityService.Application.Interfaces.Services;
 using IdentityService.Application.Services;
-using IdentityService.Infrastructure;
+using IdentityService.Application.Services.Auth;
 using IdentitySevice.Persistence;
 using IdentitySevice.Persistence.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Minio;
-
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;

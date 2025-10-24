@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Infrastructure;
+﻿namespace IdentityService.Application.Services.Auth;
 
 public static class PermissionsConst
 {

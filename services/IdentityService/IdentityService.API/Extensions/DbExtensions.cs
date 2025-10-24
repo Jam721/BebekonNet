@@ -11,9 +11,6 @@ public static class DbExtensions
         services.AddDbContext<IdentityDbContext>(options =>
         {
             options.UseNpgsql(configuration.GetConnectionString("Database"));
-
-            options.ConfigureWarnings(w =>
-                w.Ignore(RelationalEventId.PendingModelChangesWarning));
         });
     }
 }

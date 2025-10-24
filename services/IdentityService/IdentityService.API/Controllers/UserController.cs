@@ -3,8 +3,9 @@ using System.Security.Claims;
 using IdentityService.API.Contracts.Users;
 using IdentityService.Application.Interfaces.Repository.User;
 using IdentityService.Application.Interfaces.Services;
+using IdentityService.Application.Services;
+using IdentityService.Application.Services.Auth;
 using IdentityService.Domain.Models;
-using IdentityService.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -83,7 +84,7 @@ public class UserController(
         try
         {
             var token = await service.Login(request.Email, request.Password, cancellationToken);
-            Response.Cookies.Append("tasty", token, new CookieOptions()
+            Response.Cookies.Append("tasty", token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = false,

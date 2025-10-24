@@ -3,7 +3,7 @@ using IdentityService.Application.Interfaces.Repository.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IdentityService.Infrastructure;
+namespace IdentityService.Application.Services.Auth;
 
 public class PermissionsRequirementsHandler(IServiceScopeFactory scopeFactory) : AuthorizationHandler<PermissionRequirements>
 {

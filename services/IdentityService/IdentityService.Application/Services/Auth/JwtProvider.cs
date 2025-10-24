@@ -6,7 +6,7 @@ using IdentityService.Domain.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace IdentityService.Infrastructure;
+namespace IdentityService.Application.Services.Auth;
 
 public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
