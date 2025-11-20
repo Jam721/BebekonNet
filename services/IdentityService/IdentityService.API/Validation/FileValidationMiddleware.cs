@@ -4,7 +4,7 @@ public class FileValidationMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly IList<string> _allowedExtensions = new[] { ".jpg", ".png", ".gif", ".jpeg", ".bmp", ".ico" };
-    private const long MaxFileSize = 1 * 1024 * 1024; // 5MB
+    private const long MaxFileSize = 1 * 1024 * 1024;
 
     public FileValidationMiddleware(RequestDelegate next)
     {

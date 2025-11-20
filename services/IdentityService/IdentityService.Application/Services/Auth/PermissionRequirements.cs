@@ -2,12 +2,7 @@
 
 namespace IdentityService.Application.Services.Auth;
 
-public class PermissionRequirements : IAuthorizationRequirement
+public class PermissionRequirements(string permission) : IAuthorizationRequirement
 {
-    public string Permission { get; }
-
-    public PermissionRequirements(string permission)
-    {
-        Permission = permission;
-    }
+    public string Permission { get; } = permission;
 }

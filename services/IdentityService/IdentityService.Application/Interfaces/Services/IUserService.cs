@@ -16,4 +16,7 @@ public interface IUserService
         string? password,
         IFormFile? avatarFile,
         CancellationToken ct = default);
+    
+    Task<UserModel?> GetCurrentUser(CancellationToken ct = default);
+    string? GetTokenFromHeader();
 }

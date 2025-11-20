@@ -3,15 +3,13 @@ using System.Security.Claims;
 using IdentityService.API.Contracts.Users;
 using IdentityService.Application.Interfaces.Repository.User;
 using IdentityService.Application.Interfaces.Services;
-using IdentityService.Application.Services;
 using IdentityService.Application.Services.Auth;
-using IdentityService.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.API.Controllers;
 
-[Route("identity/[controller]")]
+[Route("api/user")]
 [ApiController]
 public class UserController(
     IUserRepository repository,
@@ -19,26 +17,25 @@ public class UserController(
     ILogger<UserController> logger)
     : ControllerBase
 {
-
-    [HttpPost("AllUsers")]
+    [HttpPost("all")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> AllUsers(CancellationToken cancellationToken)
     {
         var users = await repository.GetAllUsersAsync(cancellationToken);
-        
         return Ok(users);
     }
 
-    [HttpPut("UpdateUser")]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateUser(
-        [FromForm]UpdateUserRequest request, 
+        [FromForm] UpdateUserRequest request, 
         CancellationToken cancellationToken)
     {
         try
         {
-            var currentUser = await GetCurrentUser(cancellationToken);
+            var currentUser = await service.GetCurrentUser(cancellationToken);
             if (currentUser == null)
                 return Unauthorized();
+            
             var user = await service.UpdateUser(
                 currentUser.Id, request.Email, request.UserName,
                 request.Password, request.AvatarFile,
@@ -52,13 +49,14 @@ public class UserController(
         }
     }
     
-    [HttpPost("Register")]
+    [HttpPost("register")]
     public async Task<IActionResult> Register(
         [FromForm] RegisterUserRequest request, 
         CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             throw new Exception();
+        
         try
         {
             await service.Register(request.UserName, request.Email, request.Password, request.AvatarFile, cancellationToken);
@@ -70,10 +68,9 @@ public class UserController(
             logger.LogError($"User {request.UserName} failed to register: {ex.Message}");
             return BadRequest();
         }
-        
     }
 
-    [HttpPost("Login")]
+    [HttpPost("login")]
     public async Task<IActionResult> Login(
         LoginUserRequest request, 
         CancellationToken cancellationToken)
@@ -84,17 +81,9 @@ public class UserController(
         try
         {
             var token = await service.Login(request.Email, request.Password, cancellationToken);
-            Response.Cookies.Append("tasty", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false,
-                SameSite = SameSiteMode.Lax,
-                Expires = DateTimeOffset.UtcNow.AddDays(7),
-                Path = "/"
-            });
             logger.LogInformation($"User {request.Email} logged in");
             
-            return Ok(token);
+            return Ok(new { Token = token });
         }
         catch (Exception ex)
         {
@@ -103,7 +92,7 @@ public class UserController(
         }
     }
 
-    [HttpGet("Me")]
+    [HttpGet("me")]
     [Authorize(Policy = PermissionsConst.Read)]
     public async Task<IActionResult> Me(CancellationToken cancellationToken)
     {
@@ -112,12 +101,12 @@ public class UserController(
         
         try
         {
-            var user = await GetCurrentUser(cancellationToken);
+            var user = await service.GetCurrentUser(cancellationToken);
             
             if(user == null)
                 return NotFound("User not found");
             
-            logger.LogInformation($"User {user.Email} logged in");
+            logger.LogInformation($"User {user.Email} accessed Me endpoint");
             
             return Ok(new
             {
@@ -127,7 +116,6 @@ public class UserController(
                 user.CreatedAt,
                 user.AvatarUrl
             });
-            
         }
         catch (Exception e)
         {
@@ -136,14 +124,14 @@ public class UserController(
         }
     }
 
-    [HttpPost("Logout")]
+    [HttpPost("logout")]
     [Authorize]
     public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
             throw new Exception();
-        var user = await GetCurrentUser(cancellationToken);
-        Response.Cookies.Delete("tasty");
+        
+        var user = await service.GetCurrentUser(cancellationToken);
 
         if (user != null)
         {
@@ -154,10 +142,10 @@ public class UserController(
             logger.LogWarning("Unknown user attempted logout");
         }
     
-        return Ok();
+        return Ok(new { Message = "Logged out successfully" });
     }
 
-    [HttpPost("GiveAuthorship")]
+    [HttpPost("give-access")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GiveAuthorship(string email, CancellationToken token)
     {
@@ -174,15 +162,15 @@ public class UserController(
         }
     }
 
-    [HttpGet("GetRole")]
+    [HttpGet("role")]
     public IActionResult GetCurrentRole()
     {
         try
         {
-            var token = Request.Cookies["tasty"];
+            var token = service.GetTokenFromHeader();
             if (string.IsNullOrEmpty(token))
             {
-                logger.LogWarning("Token not found in cookies");
+                logger.LogWarning("Token not found in Authorization header");
                 return NotFound("Token not found");
             }
 
@@ -190,48 +178,15 @@ public class UserController(
             var tokenRead = tokenHandler.ReadJwtToken(token);
             var role = tokenRead.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-            if (string.IsNullOrEmpty(role))
-            {
-                logger.LogWarning("Role claim not found in token");
-                return NotFound("Role claim not found");
-            }
+            if (!string.IsNullOrEmpty(role)) return Ok(role);
+            logger.LogWarning("Role claim not found in token");
+            return NotFound("Role claim not found");
 
-            return Ok(role);
         }
         catch (Exception ex)
         {
             logger.LogError($"Error getting current user: {ex.Message}");
             return BadRequest();
-        }
-    }
-    
-    private async Task<UserModel?> GetCurrentUser(CancellationToken cancellationToken)
-    {
-        try
-        {
-            var token = Request.Cookies["tasty"];
-            if (string.IsNullOrEmpty(token))
-            {
-                logger.LogWarning("Token not found in cookies");
-                return null;
-            }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenRead = tokenHandler.ReadJwtToken(token);
-            var email = tokenRead.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-
-            if (string.IsNullOrEmpty(email))
-            {
-                logger.LogWarning("Email claim not found in token");
-                return null;
-            }
-
-            return await repository.GetUserByEmail(email, cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError($"Error getting current user: {ex.Message}");
-            return null;
         }
     }
 }

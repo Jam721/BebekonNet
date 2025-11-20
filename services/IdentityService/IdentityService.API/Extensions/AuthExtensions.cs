@@ -23,12 +23,16 @@ public static class AuthExtensions
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
                 };
-
-                options.Events = new JwtBearerEvents()
+                
+                options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
-                        context.Token = context.Request.Cookies["tasty"];
+                        var authorizationHeader = context.Request.Headers.Authorization.ToString();
+                        if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
+                        {
+                            context.Token = authorizationHeader["Bearer ".Length..].Trim();
+                        }
 
                         return Task.CompletedTask;
                     }
@@ -37,16 +41,14 @@ public static class AuthExtensions
 
         services.AddSingleton<IAuthorizationHandler, PermissionsRequirementsHandler>();
 
-        services.AddAuthorization(x=>
-        {
-            x.AddPolicy(PermissionsConst.Read, builder => builder
-                .Requirements.Add(new PermissionRequirements(PermissionsConst.Read)));
-            x.AddPolicy(PermissionsConst.Create, builder => builder
-                .Requirements.Add(new PermissionRequirements(PermissionsConst.Create)));
-            x.AddPolicy(PermissionsConst.Delete, builder => builder
-                .Requirements.Add(new PermissionRequirements(PermissionsConst.Delete)));
-            x.AddPolicy(PermissionsConst.Update, builder => builder
+        services.AddAuthorizationBuilder()
+            .AddPolicy(PermissionsConst.Read, builder => builder
+                .Requirements.Add(new PermissionRequirements(PermissionsConst.Read)))
+            .AddPolicy(PermissionsConst.Create, builder => builder
+                .Requirements.Add(new PermissionRequirements(PermissionsConst.Create)))
+            .AddPolicy(PermissionsConst.Delete, builder => builder
+                .Requirements.Add(new PermissionRequirements(PermissionsConst.Delete)))
+            .AddPolicy(PermissionsConst.Update, builder => builder
                 .Requirements.Add(new PermissionRequirements(PermissionsConst.Update)));
-        });
     }
 }
